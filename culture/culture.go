@@ -1,7 +1,7 @@
 package culture
 
 import (
-    "fmt"
+    // "fmt"
     "gondolin/loader"
 )
 
@@ -31,6 +31,6 @@ func Populate(m loader.Message) Pool {
         pool.Locations[l.ID] = cl
     }
 
-    fmt.Printf("%v", pool)
+    // fmt.Printf("%v", pool)
     return pool
 }

@@ -29,11 +29,7 @@ func backward(b chan int, n int) {
 }
 
 func Run() {
-    // fmt.Printf("%v\n", loader.Load())
     culture.Populate(loader.Load())
-    //m := loader.Load()
-    // fmt.Printf("%v\n", m.Mob[0].Properties[1].Name)
-    // fmt.Printf("%v\n", m.Mob[0].Properties[1].Value)
 
     f := make(chan int)
     b := make(chan int)
