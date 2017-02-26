@@ -10,6 +10,7 @@ dispatching and processing.
 
 import (
     "time"
+    "gondolin/culture"
     "gondolin/loader"
 )
 
@@ -29,7 +30,7 @@ func backward(b chan int, n int) {
 
 func Run() {
     // fmt.Printf("%v\n", loader.Load())
-    loader.Load()
+    culture.Populate(loader.Load())
     //m := loader.Load()
     // fmt.Printf("%v\n", m.Mob[0].Properties[1].Name)
     // fmt.Printf("%v\n", m.Mob[0].Properties[1].Value)

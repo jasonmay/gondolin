@@ -7,6 +7,7 @@ import (
 )
 
 type Loc struct {
+    ID string `json:"id"`
     Description string `json:"description"`
     Title string `json:"title"`
     Exits []Exit `json:"exits"`
