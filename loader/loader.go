@@ -47,5 +47,6 @@ func Load() Message {
     }
     var m Message
     json.Unmarshal(f, &m)
+
     return m
 }
