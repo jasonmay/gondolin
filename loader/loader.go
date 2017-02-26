@@ -11,11 +11,10 @@ type Loc struct {
     Description string `json:"description"`
     Title string `json:"title"`
     Exits []Exit `json:"exits"`
-    Properties []Property `json:"properties"`
 }
 
 type Exit struct {
-    Name string `json:"name"`
+    Direction string `json:"direction"`
     Entity string `json:"entity"`
     Type string `json:"type"`
 }

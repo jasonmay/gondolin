@@ -26,7 +26,14 @@ func Populate(m loader.Message) Pool {
     for _, l := range m.Loc {
 
         cl := Location{}
+        cl.ID = l.ID
         cl.Title = l.Title
+        cl.Description = l.Description
+        cl.Exits = map[string]Exit{}
+        for _, ex := range l.Exits {
+            exit := Exit{ex.Direction, ex.Entity, ex.Type}
+            cl.Exits[ex.Direction] = exit
+        }
 
         pool.Locations[l.ID] = cl
     }

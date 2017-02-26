@@ -1,8 +1,10 @@
 package culture
 
 type Location struct {
+    ID string
     Title string
-    Exits []Exit
+    Description string
+    Exits map[string]Exit
 }
 
 type Exit struct {
