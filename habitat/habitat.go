@@ -10,8 +10,8 @@ dispatching and processing.
 
 import (
     "time"
-    "gondolin/culture"
     "gondolin/loader"
+    "gondolin/culture"
 )
 
 func forward(f chan int, n int) {
@@ -28,8 +28,44 @@ func backward(b chan int, n int) {
     go backward(b, next)
 }
 
+type Pool struct {
+    Mobiles map[string]culture.Mobile
+    Locations map[string]culture.Location
+    Objects map[string]culture.Object
+}
+
+func NewPool() Pool {
+    pool := Pool{}
+    pool.Mobiles = map[string]culture.Mobile{}
+    pool.Locations = map[string]culture.Location{}
+    pool.Objects = map[string]culture.Object{}
+
+    return pool
+}
+
+func populate(m loader.Message) Pool {
+    pool := NewPool()
+    for _, l := range m.Loc {
+
+        cl := culture.Location{}
+        cl.ID = l.ID
+        cl.Title = l.Title
+        cl.Description = l.Description
+        cl.Exits = map[string]culture.Exit{}
+        for _, ex := range l.Exits {
+            exit := culture.Exit{ex.Direction, ex.Entity, ex.Type}
+            cl.Exits[ex.Direction] = exit
+        }
+
+        pool.Locations[l.ID] = cl
+    }
+
+    return pool
+}
+
 func Run() {
-    culture.Populate(loader.Load())
+    //pool := populate(loader.Load())
+      populate(loader.Load())
 
     f := make(chan int)
     b := make(chan int)
