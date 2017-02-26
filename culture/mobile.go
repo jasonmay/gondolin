@@ -2,7 +2,7 @@
 package culture
 
 type Mobile struct {
-    name string
-    location Location
+    Name string
+    Location Location
 }
 

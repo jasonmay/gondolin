@@ -6,16 +6,16 @@ import (
 )
 
 type Pool struct {
-    mobiles map[string]Mobile
-    locations map[string]Location
-    objects map[string]Object
+    Mobiles map[string]Mobile
+    Locations map[string]Location
+    Objects map[string]Object
 }
 
 func NewPool() Pool {
     pool := Pool{}
-    pool.mobiles = map[string]Mobile{}
-    pool.locations = map[string]Location{}
-    pool.objects = map[string]Object{}
+    pool.Mobiles = map[string]Mobile{}
+    pool.Locations = map[string]Location{}
+    pool.Objects = map[string]Object{}
 
     return pool
 }
@@ -28,7 +28,7 @@ func Populate(m loader.Message) Pool {
         cl := Location{}
         cl.Title = l.Title
 
-        pool.locations[l.ID] = cl
+        pool.Locations[l.ID] = cl
     }
 
     fmt.Printf("%v", pool)
