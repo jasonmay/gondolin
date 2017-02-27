@@ -1,3 +1,6 @@
+// Gondolin is a backend server that runs a MUD
+// world and sends/receives information to other
+// components over structured protocols.
 package main
 
 import (
