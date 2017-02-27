@@ -73,13 +73,18 @@ func populate(m loader.Message) Pool {
 
         cm.Speed = 0
         for _, p := range m.Properties {
-            if p.Name == "speed" {
+            switch p.Name {
+            case "speed":
                 speed, err := strconv.Atoi(p.Value)
                 cm.Speed = speed
                 if err != nil {
                     println(err)
                     continue
                 }
+                break
+            case "location":
+                cm.Location = pool.Locations[p.Value]
+                break
             }
         }
         pool.Mobiles[m.ID] = cm
@@ -104,6 +109,7 @@ func Run() {
         select {
         case m := <-moveTick:
             println("tick!", m.ID)
+            pool.Travel(m)
         }
     }
 }
