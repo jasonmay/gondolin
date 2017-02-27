@@ -65,12 +65,10 @@ func populate(m loader.Message) Pool {
     fmt.Printf("loaded %d locations\n", len(pool.Locations))
 
     for _, m := range m.Mob {
-
         cm := culture.Mobile{
             MoveChan: make(chan float64),
         }
         cm.ID = m.ID
-
         cm.Speed = 0
         for _, p := range m.Properties {
             switch p.Name {
