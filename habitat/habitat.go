@@ -10,23 +10,12 @@ dispatching and processing.
 
 import (
     "time"
+    "fmt"
+    "math/rand"
+    "strconv"
     "gondolin/loader"
     "gondolin/culture"
 )
-
-func forward(f chan int, n int) {
-    f <- n
-    time.Sleep(time.Second * time.Duration(n))
-    next := n % 5 + 1
-    go forward(f, next)
-}
-
-func backward(b chan int, n int) {
-    b <- n
-    time.Sleep(time.Second * time.Duration(n))
-    next := ((n + 3) % 5) + 1
-    go backward(b, next)
-}
 
 type Pool struct {
     Mobiles map[string]culture.Mobile
@@ -41,6 +30,14 @@ func NewPool() Pool {
     pool.Objects = map[string]culture.Object{}
 
     return pool
+}
+
+func moveMobileTick(mobile culture.Mobile, moveTick chan culture.Mobile) {
+    moveTime := 200.0 / float64(mobile.Speed)
+    moveTimeWithVariance := rand.NormFloat64() * (moveTime * 0.1) + moveTime
+    time.Sleep(time.Millisecond * time.Duration(moveTimeWithVariance * 1000.0))
+    moveTick <- mobile
+    go moveMobileTick(mobile, moveTick)
 }
 
 func populate(m loader.Message) Pool {
@@ -59,26 +56,48 @@ func populate(m loader.Message) Pool {
 
         pool.Locations[l.ID] = cl
     }
+    fmt.Printf("loaded %d locations\n", len(pool.Locations))
+
+    for _, m := range m.Mob {
+
+        cm := culture.Mobile{
+            MoveChan: make(chan float64),
+        }
+        cm.ID = m.ID
+
+        cm.Speed = 0
+        for _, p := range m.Properties {
+            if p.Name == "speed" {
+                speed, err := strconv.Atoi(p.Value)
+                cm.Speed = speed
+                if err != nil {
+                    println(err)
+                    continue
+                }
+            }
+        }
+        pool.Mobiles[m.ID] = cm
+    }
+    fmt.Printf("loaded %d mobiles\n", len(pool.Mobiles))
 
     return pool
 }
 
 func Run() {
-    //pool := populate(loader.Load())
-      populate(loader.Load())
+    pool := populate(loader.Load())
 
-    f := make(chan int)
-    b := make(chan int)
+    moveTick := make(chan culture.Mobile)
 
-    go forward(f, 1)
-    go backward(b, 1)
+    for _, m := range pool.Mobiles {
+        if m.Speed > 0 {
+            go moveMobileTick(m, moveTick)
+        }
+    }
 
     for {
         select {
-        case n := <-f:
-            println("forward to ", n)
-        case n := <-b:
-            println("backward to ", n)
+        case m := <-moveTick:
+            println("tick!", m.ID)
         }
     }
 }
